@@ -1,10 +1,17 @@
 #!/bin/bash
 
-
 #ENV
 sleep=1;
 
 
+#Gathering facts
+declare -a a_user
+declare -a a_homedir
+
+a_user=($(getent passwd | awk -F: '$3 > 999' | awk -F: '$3 < 60000 {print $1}'))
+a_user+=(root)
+a_homedir=($(getent passwd | awk -F: '$3 > 999' | awk -F: '$3 < 60000 {print $6}'))
+a_homedir+=(/root)
 
 ############Install zsh############
 if [ -x "$(command -v zsh)" ];
@@ -18,10 +25,20 @@ else
         sed -ie 's|$HOME/.oh-my-zsh|/etc/oh-my-zsh|g' /etc/skel/.zshrc && \
         echo "export ZSH_CACHE_DIR=~/.oh-my-zsh/cache" >> /etc/skel/.zshrc && \
         mkdir -p /etc/skel/.oh-my-zsh/cache
-        chsh -s /bin/zsh loginuser
-        chsh -s /bin/zsh root
-        ls -s /etc/skel/.zshrc /home/loginuser/.zshrc
-        ls -s /etc/skel/.zshrc /root/.zshrc
+
+        ###Change Login Shell###
+        for i in "${a_user[@]}"
+                do
+                         chsh -s /bin/zsh $i
+        done
+        ########################
+
+        ###Link .zshrc to home dir###
+        for i in "${a_homedir[@]}"
+                do
+                        ln -s /etc/skel/.zshrc $i/.zshrc
+        done
+        #############################
         git clone https://github.com/zsh-users/zsh-syntax-highlighting.git /etc/oh-my-zsh/plugins/zsh-syntax-highlighting
         git clone https://github.com/zsh-users/zsh-autosuggestions /etc/oh-my-zsh/plugins/zsh-autosuggestions
         git clone https://github.com/zsh-users/zsh-completions /etc/oh-my-zsh/plugins/zsh-completions
@@ -62,7 +79,13 @@ else
         apt-get update;
         apt-get install -y -qq docker-ce docker-ce-cli containerd.io;
         groupadd docker;
-        usermod -aG docker loginuser;
+
+        ###Add User to group docker###
+        for i in "${a_user[@]}"
+                do
+                        usermod -aG docker $i
+        done
+        #############################
 fi
 
 
@@ -113,5 +136,3 @@ then
 else
         apt install -y -qq rclone;
 fi
-
-  
