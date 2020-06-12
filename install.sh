@@ -136,3 +136,36 @@ then
 else
         apt install -y -qq rclone;
 fi
+
+
+##########Create SSH KeyPair########
+
+for i in "${a_homedir[@]}"
+do
+	FILE=$i/.ssh/id_rsa.pub
+	if test -f "$FILE"; then
+		echo "SSH Keypair already exists in $i/.ssh "
+		sleep $sleep
+	else
+		for u in "${a_user[@]}"
+		do
+			sudo -u $u zsh -c "ssh-keygen -q -f ~/.ssh/id_rsa -N ''"
+		done
+	fi
+done
+
+
+clear
+
+
+	for i in "${a_homedir[@]}"
+		do
+		echo "SSH Public Key from $i"
+		cat $i/.ssh/id_rsa.pub
+		echo ""
+		echo '---------------------'
+		echo ""
+	done
+
+
+####################################
