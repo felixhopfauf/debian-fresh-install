@@ -162,9 +162,9 @@ clear
 		do
 		echo "SSH Public Key from $i"
 		cat $i/.ssh/id_rsa.pub
-		echo ""
+		echo ''
 		echo '---------------------'
-		echo ""
+		echo ''
 	done
 
 
