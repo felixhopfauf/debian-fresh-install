@@ -138,6 +138,16 @@ else
 fi
 
 
+############install BTRFS############
+if [ -x "$(command -v btrfs)" ];
+then
+        echo "BTRFS is already installed"
+        sleep $sleep
+else
+        apt install -y -qq btrfs-progs;
+fi
+
+
 ##########Create SSH KeyPair########
 
 for i in "${a_homedir[@]}"
