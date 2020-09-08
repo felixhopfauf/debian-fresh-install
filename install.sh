@@ -90,7 +90,7 @@ fi
 
 
 ############instal docker-compose############
-if [ -x "$(command -v sudo)" ];
+if [ -x "$(command -v docker-compose)" ];
 then
         echo "Docker-compose is already installed"
         sleep $sleep
