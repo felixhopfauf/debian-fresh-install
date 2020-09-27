@@ -54,6 +54,14 @@ then
         sleep $sleep
 else
         apt install -y -qq sudo;
+
+	######Add Users to sudo######
+	for u in "${a_user[@]}"
+        do
+		usermod -aG sudo $i
+        done
+	############################
+
 fi
 
 ############install glances############
@@ -82,8 +90,8 @@ else
 
         ###Add User to group docker###
         for i in "${a_user[@]}"
-                do
-                        usermod -aG docker $i
+	do
+        	usermod -aG docker $i
         done
         #############################
 fi
