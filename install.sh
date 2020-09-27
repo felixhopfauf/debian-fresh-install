@@ -58,7 +58,7 @@ else
 	######Add Users to sudo######
 	for u in "${a_user[@]}"
         do
-		usermod -aG sudo $i
+		usermod -aG sudo $u
         done
 	############################
 
