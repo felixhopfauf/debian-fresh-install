@@ -54,14 +54,13 @@ then
         sleep $sleep
 else
         apt install -y -qq sudo;
-
-	######Add Users to sudo######
-	for u in "${a_user[@]}"
-        do
-		usermod -aG sudo $u
+	
+        ###Add User to group sudo###
+        for s in "${a_user[@]}"
+	do
+        	usermod -aG sudo $s
         done
-	############################
-
+        #############################
 fi
 
 ############install glances############
